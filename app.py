@@ -2,135 +2,66 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# ---------------------------------------------------------
+# =========================================================
 # PAGE CONFIGURATION
-# ---------------------------------------------------------
+# =========================================================
 
 st.set_page_config(
-    page_title="Research Dashboard",
+    page_title="AI Research Tracker",
     page_icon="🔬",
     layout="wide"
 )
 
-# ---------------------------------------------------------
-# CUSTOM CSS
-# ---------------------------------------------------------
+# =========================================================
+# TITLE
+# =========================================================
 
-st.markdown("""
-<style>
+st.title("🔬 AI-Assisted Research Project & Publication Tracker")
 
-.main-title {
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.subtitle {
-    font-size: 17px;
-    margin-bottom: 25px;
-}
-
-.card {
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #dddddd;
-    background-color: #ffffff;
-    text-align: center;
-}
-
-.card-title {
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.card-value {
-    font-size: 32px;
-    font-weight: 700;
-    margin-top: 8px;
-}
-
-.section-title {
-    font-size: 24px;
-    font-weight: 650;
-    margin-top: 25px;
-    margin-bottom: 15px;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-
-# ---------------------------------------------------------
-# HEADER
-# ---------------------------------------------------------
-
-st.markdown(
-    '<div class="main-title">🔬 AI-Assisted Research Tracker</div>',
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    '<div class="subtitle">'
-    'Manage your research projects, papers, publications and deadlines in one place.'
-    '</div>',
-    unsafe_allow_html=True
+st.write(
+    "Welcome to your research management dashboard. "
+    "Track projects, research papers, publications and deadlines."
 )
 
 st.divider()
 
-
-# ---------------------------------------------------------
-# SAMPLE DASHBOARD DATA
-# ---------------------------------------------------------
-# These are temporary values.
-# Later we will get them automatically from SQLite.
-
-total_projects = 5
-active_projects = 3
-total_papers = 18
-published_papers = 4
-
-
-# ---------------------------------------------------------
-# STATISTICS CARDS
-# ---------------------------------------------------------
+# =========================================================
+# DASHBOARD STATISTICS
+# =========================================================
 
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.metric(
         label="📁 Total Projects",
-        value=total_projects
+        value=5
     )
 
 with col2:
     st.metric(
-        label="🚀 Active Projects",
-        value=active_projects
+        label="🔬 Active Projects",
+        value=3
     )
 
 with col3:
     st.metric(
         label="📚 Research Papers",
-        value=total_papers
+        value=18
     )
 
 with col4:
     st.metric(
-        label="🏆 Published",
-        value=published_papers
+        label="📝 Publications",
+        value=4
     )
 
+st.divider()
 
-st.markdown(
-    '<div class="section-title">📊 Research Overview</div>',
-    unsafe_allow_html=True
-)
+# =========================================================
+# PROJECT PROGRESS
+# =========================================================
 
-
-# ---------------------------------------------------------
-# PROJECT PROGRESS DATA
-# ---------------------------------------------------------
+st.subheader("📊 Research Project Progress")
 
 project_data = pd.DataFrame({
     "Project": [
@@ -150,50 +81,40 @@ project_data = pd.DataFrame({
     ]
 })
 
-
-# ---------------------------------------------------------
-# PROJECT PROGRESS CHART
-# ---------------------------------------------------------
-
-fig_progress = px.bar(
+fig = px.bar(
     project_data,
-    x="Progress",
-    y="Project",
-    orientation="h",
+    x="Project",
+    y="Progress",
     text="Progress",
-    title="Research Project Progress"
+    title="Project Completion (%)"
 )
 
-fig_progress.update_traces(
+fig.update_traces(
     texttemplate="%{text}%",
     textposition="outside"
 )
 
-fig_progress.update_layout(
-    xaxis_title="Progress (%)",
-    yaxis_title="",
-    xaxis=dict(range=[0, 100]),
+fig.update_layout(
+    yaxis=dict(range=[0, 100]),
     height=400
 )
 
 st.plotly_chart(
-    fig_progress,
+    fig,
     use_container_width=True
 )
 
-
-# ---------------------------------------------------------
+# =========================================================
 # TWO COLUMN SECTION
-# ---------------------------------------------------------
+# =========================================================
 
-left, right = st.columns(2)
+left_column, right_column = st.columns(2)
 
-
-# ---------------------------------------------------------
+# =========================================================
 # PUBLICATION STATUS
-# ---------------------------------------------------------
+# =========================================================
 
-with left:
+with left_column:
 
     st.subheader("📝 Publication Status")
 
@@ -206,7 +127,7 @@ with left:
             "Published"
         ],
 
-        "Count": [
+        "Number": [
             4,
             3,
             5,
@@ -215,28 +136,24 @@ with left:
         ]
     })
 
-    fig_publication = px.pie(
+    publication_chart = px.pie(
         publication_data,
         names="Status",
-        values="Count",
-        hole=0.4
-    )
-
-    fig_publication.update_layout(
-        height=400
+        values="Number",
+        hole=0.4,
+        title="Publication Overview"
     )
 
     st.plotly_chart(
-        fig_publication,
+        publication_chart,
         use_container_width=True
     )
 
-
-# ---------------------------------------------------------
+# =========================================================
 # UPCOMING DEADLINES
-# ---------------------------------------------------------
+# =========================================================
 
-with right:
+with right_column:
 
     st.subheader("📅 Upcoming Deadlines")
 
@@ -269,55 +186,51 @@ with right:
         hide_index=True
     )
 
+# =========================================================
+# AI ASSISTANT
+# =========================================================
 
-# ---------------------------------------------------------
-# AI ASSISTANT SECTION
-# ---------------------------------------------------------
+st.divider()
 
-st.markdown(
-    '<div class="section-title">🤖 AI Research Assistant</div>',
-    unsafe_allow_html=True
-)
+st.subheader("🤖 AI Research Assistant")
 
-ai_col1, ai_col2, ai_col3 = st.columns(3)
+ai1, ai2, ai3 = st.columns(3)
 
-with ai_col1:
+with ai1:
 
     st.info(
-        "💡 Research Topics\n\n"
-        "Generate research topic ideas using AI."
+        "💡 **Research Topic Generator**\n\n"
+        "Generate research topic ideas based on your research area."
     )
 
-with ai_col2:
+with ai2:
 
     st.info(
-        "📄 Paper Summarizer\n\n"
-        "Summarize research papers using AI."
+        "📄 **Paper Summarizer**\n\n"
+        "Upload a research paper and get an AI-assisted summary."
     )
 
-with ai_col3:
+with ai3:
 
     st.info(
-        "🔎 Research Gaps\n\n"
-        "Identify possible research gaps."
+        "🔎 **Research Gap Assistant**\n\n"
+        "Analyze existing research and identify possible research gaps."
     )
 
+# =========================================================
+# RECENT ACTIVITY
+# =========================================================
 
-# ---------------------------------------------------------
-# RECENT RESEARCH ACTIVITY
-# ---------------------------------------------------------
+st.divider()
 
-st.markdown(
-    '<div class="section-title">🕒 Recent Research Activity</div>',
-    unsafe_allow_html=True
-)
+st.subheader("🕒 Recent Research Activity")
 
-activity_data = pd.DataFrame({
+activity = pd.DataFrame({
     "Activity": [
-        "New research paper added",
-        "AI topic generated",
+        "Research paper added",
+        "New AI research topic generated",
         "Project progress updated",
-        "Publication status changed"
+        "Publication status updated"
     ],
 
     "Date": [
@@ -336,19 +249,18 @@ activity_data = pd.DataFrame({
 })
 
 st.dataframe(
-    activity_data,
+    activity,
     use_container_width=True,
     hide_index=True
 )
 
-
-# ---------------------------------------------------------
+# =========================================================
 # FOOTER
-# ---------------------------------------------------------
+# =========================================================
 
 st.divider()
 
 st.caption(
-    "🔬 AI-Assisted Research Project and Publication Tracker | "
-    "Built with Python & Streamlit"
+    "AI-Assisted Research Project and Publication Tracker "
+    "| Developed using Python & Streamlit"
 )
